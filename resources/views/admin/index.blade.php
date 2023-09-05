@@ -7,7 +7,7 @@
     @include('admin.components.loader')
     @include('admin.components.nav')
     @include('admin.components.header')
-    @include('admin.components.main')
+    <?php echo $main; ?>
     @include('admin.components.modal')
     @include('admin.components.script')
 </body>
