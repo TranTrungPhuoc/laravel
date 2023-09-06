@@ -14,21 +14,15 @@ class UserController extends Controller
         return view('admin/index', [ 'main' => $main ]);
     }
 
-    public function tbody()
+    public function tbodyPrivate()
     {
-        $str = '<tbody>';
         $users = DB::table('users')->get();
-        $i=0;
-        foreach ($users as $user) {
-            $i++;
-            $str .= '<tr>';
-            $str .= '<td>'.$i.'</td>';
-            $str .= '<td>'.$user->email.'</td>';
-            $str .= '<td>Otto</td>';
-            $str .= '<td>@mdo</td>';
-            $str .= '</tr>';
+
+        $tr = '';
+        foreach ($users as $key => $user) {
+            $tr .= $this->tr( $this->td( ($key+1) ) . $this->td($user->email) . $this->td('Otto') . $this->td('@mdo') );
         }
-        $str .= '</tbody>';
-        return $str;
+
+        return $this->tbody($tr);
     }
 }

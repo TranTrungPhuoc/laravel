@@ -11,80 +11,138 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    
+    // ------------ table
+    public function table($class='', $value='')
+    {
+        return '<table class="'.$class.'">'.$value.'</table>';
+    }
+
+    public function thead($value='')
+    {
+        return '<thead>'.$value.'</thead>';
+    }
+
+    public function tbody($value='')
+    {
+        return '<tbody>'.$value.'</tbody>';
+    }
+
+    public function tr($value='')
+    {
+        return '<tr>'.$value.'</tr>';
+    }
+
+    public function th($value='')
+    {
+        return '<th>'.$value.'</th>';
+    }
+
+    public function td($value='')
+    {
+        return '<td>'.$value.'</td>';
+    }
+    // ------------ end table
+
+
+    // ------------ list
+    public function ul($class='', $value='')
+    {
+        return '<ul class="'.$class.'">'.$value.'</ul>';
+    }
+
+    public function li($class='', $value='')
+    {
+        return '<li class="'.$class.'">'.$value.'</li>';
+    }
+    // ------------ end list
+
+    
+    // ------------ heading
+    public function h5($class='', $value='')
+    {
+        return '<h5 class="'.$class.'">'.$value.'</h5>';
+    }
+    // ------------ end heading
+
+    
+    // ------------ common
+    public function section($class='', $value='')
+    {
+        return '<section class="'.$class.'">'.$value.'</section>';
+    }
+
+    public function div($class='', $value='')
+    {
+        return '<div class="'.$class.'">'.$value.'</div>';
+    }
+
+    public function span($class='', $value='')
+    {
+        return '<span class="'.$class.'">'.$value.'</span>';
+    }
+
+    public function a($href='', $class='', $value='')
+    {
+        return '<a href="'.$href.'" class="'.$class.'">'.$value.'</a>';
+    }
+
+    public function i($class='')
+    {
+        return '<i class="'.$class.'"></i>';
+    }
+    // ------------ end common
+    
+
     public function card()
     {
-        $str = '<div class="card">';
-        $str .= $this->cardHeader();
-        $str .= $this->cardBody();
-        $str .= '</div>';
-        return $str;
+        return $this->div('card', $this->cardHeader() . $this->cardBody());
     }
 
     public function cardHeader()
     {
-        $str = '<div class="card-header">';
-        $str .= '<h5>Basic Table</h5>';
-        $str .= '<span class="d-block m-t-5">use class <code>table</code> inside table element</span>';
-        $str .= '</div>';
-        return $str;
-    }
-
-    public function thead()
-    {
-        $str = '<thead>';
-        $str .= '<tr>';
-        $str .= '<th>#</th>';
-        $str .= '<th>First Name</th>';
-        $str .= '<th>Last Name</th>';
-        $str .= '<th>Username</th>';
-        $str .= '</tr>';
-        $str .= '</thead>';
-        return $str;
+        return $this->div('card-header', $this->h5('', 'Basic Table') . $this->span('d-block m-t-5', 'use class <code>table</code> inside table element'));
     }
 
     public function cardBody()
     {
-        $str = '<div class="card-body table-border-style">';
-        $str .= '<div class="table-responsive">';
-        $str .= '<table class="table">';
-        $str .= $this->thead();
-        $str .= $this->tbody();
-        $str .= '</table></div></div>';
-        return $str;
+        $variable = array('#', 'First Name', 'Last Name', 'Username');
+
+        $th = '';
+        foreach ($variable as $key => $value) { $th .= $this->th($value); }
+
+        $thead = $this->thead($this->tr($th));
+        $tbody = $this->tbodyPrivate();
+
+        return $this->div('card-body table-border-style', $this->div('table-responsive', $this->table('table', $thead . $tbody )));
     }
 
     public function pageHeader()
     {
-        $str = '<div class="page-header">';
-        $str .= '<div class="page-block">';
-        $str .= '<div class="row align-items-center">';
-        $str .= '<div class="col-md-12">';
-        $str .= '<div class="page-header-title">';
-        $str .= '<h5 class="m-b-10">Bootstrap Basic Tables</h5></div>';
-        $str .= '<ul class="breadcrumb">';
-        $str .= '<li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>';
-        $str .= '<li class="breadcrumb-item"><a href="#!">Bootstrap Table</a></li>';
-        $str .= '<li class="breadcrumb-item"><a href="#!">Basic Tables</a></li>';
-        $str .= '</ul></div></div></div></div>';
-        return $str;
+        $h5 = $this->h5('m-b-10', 'Bootstrap Basic Tables');
+
+        $variable = array(
+            array( 'href' => 'index.html', 'title' => $this->i('feather icon-home') ),
+            array( 'href' => '#!', 'title' => 'Bootstrap Table' ),
+            array( 'href' => '#!', 'title' => 'Bootstrap Tables' )
+        );
+
+        $li='';
+        foreach ($variable as $key => $value) { $li .= $this->li('breadcrumb-item', $this->a($value['href'], '', $value['title'])); }
+
+        $pageHeaderTitle = $this->div('page-header-title', $h5);
+        $ul = $this->ul('breadcrumb', $li);
+
+        return $this->div('page-header', $this->div('page-block', $this->div('row align-items-center', $this->div('col-md-12', $pageHeaderTitle . $ul ))));
     }
 
     public function row()
     {
-        $str = '<div class="row">';
-        $str .= '<div class="col-md-12">';
-        $str .= $this->card();
-        $str .= '</div></div>';
-        return $str;
+        return $this->div('row', $this->div('col-md-12', $this->card()));
     }
 
     public function pcodedMainContainer()
     {
-        $str = '<section class="pcoded-main-container">';
-        $str .= '<div class="pcoded-content">';
-        $str .= $this->pageHeader();
-        $str .= $this->row();
-        $str .= '</div></section>';
-        return $str;
+        return $this->section('pcoded-main-container', $this->div('pcoded-content', $this->pageHeader() . $this->row()));
     }
 }
