@@ -14,6 +14,25 @@ class UserController extends Controller
         return view('admin/index', [ 'main' => $main ]);
     }
 
+    public function formView(): View
+    {
+        $main = $this->pcodedMainContainer();
+        return view('admin/index', [ 'main' => $main ]);
+    }
+
+    public function formPrivate()
+    {
+        $variable = ['Email', 'Password', 'Confirm Password', 'Phone'];
+
+        $form = '';
+        foreach ($variable as $key => $value) {
+            print_r($value);
+            $form .= $this->div('col-md-6', $this->div('form-group fill'));
+        }
+
+        return $this->div('row', $form);
+    }
+
     public function tbodyPrivate()
     {
         $users = DB::table('users')->get();

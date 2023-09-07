@@ -16,5 +16,11 @@ use App\Http\Controllers\DashboardController;
 
 Route::get('/', [LayoutController::class, 'index']);
 
-Route::get('/admin/dashboard/index', [DashboardController::class, 'index']);
-Route::get('/admin/user/index', [UserController::class, 'index']);
+Route::prefix('/admin')->group(function () {
+    Route::get('dashboard/index', [DashboardController::class, 'index']);
+    Route::prefix('/user/')->group(function () {
+        Route::get('index', [UserController::class, 'index']);
+        Route::get('add', [UserController::class, 'formView']);
+        Route::get('edit/{id}', [UserController::class, 'formView']);
+    });
+});
