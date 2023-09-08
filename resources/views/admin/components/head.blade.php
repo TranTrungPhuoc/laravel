@@ -16,3 +16,5 @@
 <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
 <!-- vendor css -->
 <link rel="stylesheet" href="/assets/css/style.css">
+<!-- add css -->
+<style>.error{color:red;font-size:13px;font-style:italic;}.error b{color:black;}</style>

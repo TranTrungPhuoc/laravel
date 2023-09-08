@@ -91,9 +91,9 @@ class Controller extends BaseController
         return '<i class="'.$class.'"></i>';
     }
 
-    public function button($class='', $value='')
+    public function button($type='', $class='', $value='')
     {
-        return '<button type="button" class="btn '.$class.' has-ripple">'.$value.'</button>';
+        return '<button type="'.$type.'" class="btn '.$class.' has-ripple">'.$value.'</button>';
     }
 
     public function form($class='', $id='', $value='')
@@ -105,8 +105,31 @@ class Controller extends BaseController
     {
         return '<label class="'.$class.'">'.$value.'</label>';
     }
+
+    public function input($type='', $id='', $class='', $name='', $placeholder='')
+    {
+        return '<input type="'.$type.'" id="'.$id.'" class="form-control '.$class.'" name="'.$name.'" placeholder="'.$placeholder.'">';
+    }
     // ------------ end common
 
+
+    public function changeText($variable)
+    {
+        $str='';
+        switch ($variable) {
+            case 'email': $str='Email'; break;
+            case 'password': $str='Mật Khẩu'; break;
+            case 'cfpassword': $str='Xác Nhận Mật Khẩu'; break;
+            case 'phone': $str='Số Điện Thoại'; break;
+            default: $str='No Name'; break;
+        }
+        return $str;
+    }
+
+    public function getParams($so)
+    {
+        return \Request::segment($so);
+    }
 
     public function pageHeader()
     {
@@ -129,34 +152,29 @@ class Controller extends BaseController
 
     public function cardBody()
     {
+        $module = $this->getParams(3);
+
         $variable = array('#', 'First Name', 'Last Name', 'Username');
 
         $th = '';
         foreach ($variable as $key => $value) { $th .= $this->th($value); }
 
-        $thead = $this->thead($this->tr($th));
-        $tbody = $this->tbodyPrivate();
+        $class = ($module == 'index') ? 'table-border-style' : '';
 
-        $module = \Request::segment(3);
+        $table = $this->div('table-responsive', $this->table('table', $this->thead($this->tr($th)) . $this->tbodyPrivate() ));
+        $form = $this->form('', 'formModule', $this->formPrivate());
 
-        $content = '';
-        $class = '';
-
-        if($module == 'index'){
-            $class = 'table-border-style';
-            $content = $this->div('table-responsive', $this->table('table', $thead . $tbody ));
-        }else{
-            $content = $this->form('', 'validation-form123', $this->formPrivate());
-        }
-
-        return $this->div('card-body ' . $class, $content);
+        return $this->div('card-body ' . $class, ($module == 'index') ? $table : $form);
     }
 
     public function cardHeader()
     {
-        $module = \Request::segment(2);
-        $a = $this->a('/admin/'.$module.'/add', '', $this->button('btn-outline-primary', $this->i('feather icon-plus') . ' Thêm Dữ Liệu'));
-        return $this->div('card-header', $this->span('d-block', $a));
+        $module = $this->getParams(2);
+
+        $href = '/admin/'.$module.'/add';
+        $value = $this->button('button', 'btn-outline-primary', $this->i('feather icon-plus') . ' Thêm Dữ Liệu');
+
+        return $this->div('card-header', $this->span('d-block', $this->a($href, '', $value)));
     }
 
     public function card()

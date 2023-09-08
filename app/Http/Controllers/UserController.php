@@ -22,15 +22,19 @@ class UserController extends Controller
 
     public function formPrivate()
     {
-        $variable = ['Email', 'Password', 'Confirm Password', 'Phone'];
+        $variable = ['Email', 'Password', 'Cfpassword', 'Phone'];
 
         $form = '';
         foreach ($variable as $key => $value) {
-            print_r($value);
-            $form .= $this->div('col-md-6', $this->div('form-group fill'));
+            $input = $this->input('text', strtolower($value));
+            $span = $this->span('error error_'.strtolower($value));
+
+            $formGroup = $this->label('form-label', $this->changeText(strtolower($value))) . $input . $span;
+
+            $form .= $this->div('col-md-6', $this->div('form-group fill', $formGroup ));
         }
 
-        return $this->div('row', $form);
+        return $this->div('row', $form) . $this->button('submit', 'btn-primary', 'Lưu');
     }
 
     public function tbodyPrivate()

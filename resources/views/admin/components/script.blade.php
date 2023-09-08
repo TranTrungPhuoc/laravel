@@ -52,3 +52,40 @@
         }
     }
 </script>
+
+<script>
+    function getValue(id) {
+        return $('#'+id).val();
+    }
+
+    function isEmpty(id) {
+        return (getValue(id)!=undefined&&getValue(id).trim()=='') ? true : false;
+    }
+
+    function setValue(id, value) {
+        $('.error_'+id).html(value);
+    }
+
+    function changeText(key) {
+        let str='';
+        switch (key) {
+            case 'email': str='Email'; break;
+            case 'password': str='Mật Khẩu'; break;
+            case 'cfpassword': str='Xác Nhận Mật Khẩu'; break;
+            case 'phone': str='Số Điện Thoại'; break;
+            default: str='NoId'; break;
+        }
+        return str;
+    }
+
+    $(document).ready(function () {
+        $('#formModule').on('submit', function(e){
+            e.preventDefault();
+            const formList = ['email', 'password', 'cfpassword', 'phone'];
+            for (let index = 0; index < formList.length; index++) {
+                const element = formList[index];
+                if(isEmpty(element)){ setValue(element, '<b>'+ changeText(element) + '</b> không được rỗng !!!') }
+            }
+        })
+    });
+</script>
