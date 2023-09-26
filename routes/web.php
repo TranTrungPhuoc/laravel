@@ -20,7 +20,8 @@ Route::prefix('admin')->group(function () {
     Route::get('dashboard/index', [DashboardController::class, 'index']);
     Route::prefix('user')->group(function () {
         Route::get('index', [UserController::class, 'index']);
-        Route::get('add', [UserController::class, 'formView']);
-        Route::get('edit/{id}', [UserController::class, 'formView']);
+        Route::get('add', [UserController::class, 'formIndex']);
+        Route::get('edit/{id}', [UserController::class, 'formIndex']);
+        Route::post('handle', [UserController::class, 'handle']);
     });
 });

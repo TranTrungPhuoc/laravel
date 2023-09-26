@@ -98,7 +98,7 @@ class Controller extends BaseController
 
     public function form($class='', $id='', $value='')
     {
-        return '<form class="'.$class.'" id="'.$id.'" action="#!" novalidate="novalidate">'.$value.'</form>';
+        return '<form class="'.$class.'" id="'.$id.'" action="#!" novalidate="novalidate">'.$this->input('hidden', '', '', '_token', '', csrf_token()).$value.'</form>';
     }
 
     public function label($class='', $value='')
@@ -106,9 +106,9 @@ class Controller extends BaseController
         return '<label class="'.$class.'">'.$value.'</label>';
     }
 
-    public function input($type='', $id='', $class='', $name='', $placeholder='')
+    public function input($type='', $id='', $class='', $name='', $placeholder='', $value='')
     {
-        return '<input type="'.$type.'" id="'.$id.'" class="form-control '.$class.'" name="'.$name.'" placeholder="'.$placeholder.'">';
+        return '<input type="'.$type.'" id="'.$id.'" class="form-control '.$class.'" name="'.$name.'" value="'.$value.'" placeholder="'.$placeholder.'">';
     }
     // ------------ end common
 
@@ -161,8 +161,12 @@ class Controller extends BaseController
 
         $class = ($module == 'index') ? 'table-border-style' : '';
 
-        $table = $this->div('table-responsive', $this->table('table', $this->thead($this->tr($th)) . $this->tbodyPrivate() ));
-        $form = $this->form('', 'formModule', $this->formPrivate());
+        $table = $this->div('table-responsive', $this->table('table', $this->thead($this->tr($th)) . $this->tbodyHtml() ));
+
+        $btn_save = $this->button('submit', 'btn-primary', 'Lưu');
+        $btn_exit = $this->a('/admin/'.$this->getParams(2).'/index', 'btn btn-secondary', 'Thoát');
+
+        $form = $this->form('', 'formModule', $this->formHtml() . $btn_save . '&nbsp;' . $btn_exit);
 
         return $this->div('card-body ' . $class, ($module == 'index') ? $table : $form);
     }
@@ -170,11 +174,12 @@ class Controller extends BaseController
     public function cardHeader()
     {
         $module = $this->getParams(2);
+        $func = $this->getParams(3);
 
         $href = '/admin/'.$module.'/add';
         $value = $this->button('button', 'btn-outline-primary', $this->i('feather icon-plus') . ' Thêm Dữ Liệu');
 
-        return $this->div('card-header', $this->span('d-block', $this->a($href, '', $value)));
+        return ($func == 'index') ? $this->div('card-header', $this->span('d-block', $this->a($href, '', $value))) : '';
     }
 
     public function card()
@@ -190,5 +195,11 @@ class Controller extends BaseController
     public function pcodedMainContainer()
     {
         return $this->section('pcoded-main-container', $this->div('pcoded-content', $this->pageHeader() . $this->row()));
+    }
+
+    public function handle() {
+        $data = \Request::input();
+        unset($data['_token']);
+        print_r($data);
     }
 }

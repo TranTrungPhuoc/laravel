@@ -81,11 +81,39 @@
     $(document).ready(function () {
         $('#formModule').on('submit', function(e){
             e.preventDefault();
-            const formList = ['email', 'password', 'cfpassword', 'phone'];
-            for (let index = 0; index < formList.length; index++) {
-                const element = formList[index];
-                if(isEmpty(element)){ setValue(element, '<b>'+ changeText(element) + '</b> không được rỗng !!!') }
+            const array = $('form').serializeArray()
+            const data = {}
+            for (let index = 0; index < array.length; index++) {
+                data[array[index].name] = array[index].value
+                const element = array[index].name;
+                if(isEmpty(element)){ setValue(element, changeText(element) + ' không được rỗng !!!') }
             }
+            $.ajax({
+                url: '/admin/user/handle',
+                type: 'POST',
+                // beforeSend: function(){ $('.loading').show() },
+                data, 
+                success: function(results){
+                    // $('.loading').hide()
+                    // if(results.length == 0){
+                    //     if(window.location.pathname.includes('add')){
+                    //         alert('Thêm thành công !!!')
+                    //         window.location.href = '/admin/<%-module%>/index'
+                    //     }else if(window.location.pathname.includes('edit')){
+                    //         $('.save .alert').remove()
+                    //         $('.save').append('<div class="alert alert-success mt-3" role="alert">Đã Cập Nhật</div>')
+                    //     }
+                    // }else{
+                    //     $('.alert').remove()
+                    //     $('.error').text('')
+                    //     results.forEach((e)=>{
+                    //         const key=Object.keys(e)[0]
+                    //         $('.error_'+key).text(e[key])
+                    //     })
+                    // }
+                    console.log(results);
+                } 
+            })
         })
     });
 </script>
